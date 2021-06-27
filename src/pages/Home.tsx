@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import '../styles/auth.scss';
 import { FormEvent, useState } from 'react';
 import { database } from '../services/firebase';
+import toast, { Toaster } from 'react-hot-toast';
 
 export function Home() {
   const history = useHistory();
@@ -22,6 +23,7 @@ export function Home() {
     }
     //só vai permitir exercutar a linha abaixo se await for verdadeiro(logado)
     history.push('/rooms/new');
+    
   }
 
   //!!!!Parte do codigo que entra em salas já criadas!!!
@@ -37,12 +39,12 @@ export function Home() {
 
     //caso não exista a sala
     if(!roomRef.exists()){
-      alert('Room does not exists');
+      toast.error('A sala não existe');
       return;
     }
     //sala encerrada
     if (roomRef.val().endedAt) {
-      alert('Room already closed.');
+      toast.error('A sala foi encerrada');
       return;
     }
     
@@ -50,6 +52,7 @@ export function Home() {
   }
   return (
     <div id="page-auth">
+      <Toaster position="top-right" reverseOrder={false}/>
       <aside>
         <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas" />
         <strong>Crie salas de Q&amp;A ao-vivo</strong>
